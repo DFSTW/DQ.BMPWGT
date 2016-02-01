@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Thyt.TiPLM.BRL.Admin.NewResponsibility;
@@ -18,8 +19,10 @@ namespace DQ.BMPWGT.SVR
         string usernmame;
         DALDOSSIER DWGMaster;
         Dictionary<string, string> userPrint = new Dictionary<string, string>();
-        public WGT2DOSSIOR(Guid user, DBParameter dbParam)
+        string ElecVersion = string.Empty;
+        public WGT2DOSSIOR(Guid user, DBParameter dbParam, bool Elec = false)
         {
+            if (Elec) ElecVersion = "-电子版";
             userOid = user;
             var userss = new BRUser(userOid).GetUserByOid(userOid);
             usernmame = userss.Name;
@@ -29,7 +32,8 @@ namespace DQ.BMPWGT.SVR
 
         private void ReadUser()
         {
-            var lines = File.ReadAllLines("userMap.txt");
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "userMap.txt");
+            var lines = File.ReadAllLines(path);
             foreach (var line in lines)
             {
                 var tmp = line.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
@@ -40,6 +44,7 @@ namespace DQ.BMPWGT.SVR
         }
         public void Run(string box, List<string> draws, int number, string comment, string order)
         {
+            box = box + ElecVersion;
             //if (!base.isInTrans) base.dbParam.Open();
             QRItem qritem = new QRItem(base.dbParam);
             PRItem pritem = new PRItem(base.dbParam);
@@ -177,7 +182,7 @@ namespace DQ.BMPWGT.SVR
                 doc.Iteration.SetAttrValue("ORGPRINTER", "邓文斌");
 
             doc.Iteration.SetAttrValue("TWDMC", "外供图");
-            doc.Iteration.SetAttrValue("WKFLINFO", comment + "(" + order + ")");
+            doc.Iteration.SetAttrValue("WKFLINFO", comment /*+ "(" + order + ")"*/);
             doc.Iteration.SetAttrValue("DOCCODE", ID);
             doc.Iteration.SetAttrValue("YCT", "其它");
             //doc.Iteration.SetAttrValue("NAME", "外供图：" + comment + "(" + order + ")");
@@ -205,17 +210,17 @@ namespace DQ.BMPWGT.SVR
                 var heziMaster = qritem.GetItemMaster(hezi, "HEZI", userOid);
                 var heziItem = qritem.GetBizItem(heziMaster.Oid, 0, 0, Guid.Empty, userOid, BizItemMode.BizItem) as DEBusinessItem;
                 var content = heziItem.GetAttrValue("I", "WGTQD") as byte[];
-                var fenceList = qritem.GetLinkedRelationItems(heziItem.MasterOid, 0, 0, "PARTTOPART", userOid, null);
-                foreach (DERelation2 fencerel in fenceList)
+                
+                var fenceList = qritem.GetLinkedRelationItems(heziItem.MasterOid, heziItem.RevNum, heziItem.IterNum, "PARTTOPART", userOid, null);
+                foreach (DEBusinessItem fenceItem in fenceList)
                 {
-                    var order = fencerel.GetAttrValue("ORDER");
-                    var fenceItem = qritem.GetItemIteration(fencerel.LeftObj, "FENCE", false, userOid);
-                    var number = fenceItem.GetAttrValue("TZZS");
-                    var comment = fenceItem.GetAttrValue("PROJECTNAME");
+                    //var order = fencerel.GetAttrValue("ORDER");
+                    var number = fenceItem.GetAttrValue("I","TZZS");
+                    var comment = fenceItem.GetAttrValue("I","PROJECTNAME");
 
                     //draws.AddRange(PassWGTQD(Encoding.UTF8.GetString(content)));
                     var draws = PassWGTQD(Encoding.UTF8.GetString(content));
-                    Run(heziItem.Id, draws, Convert.ToInt32(number), (string)comment, Convert.ToInt32(order).ToString());
+                    Run(heziItem.Id, draws, Convert.ToInt32(number), (string)comment, string.Empty);
                     //break;
                 }
             }

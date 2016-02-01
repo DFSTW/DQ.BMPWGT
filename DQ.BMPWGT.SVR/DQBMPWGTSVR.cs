@@ -45,7 +45,7 @@ namespace DQ.BMPWGT.SVR
             Guid operationID = isa.OperationRelationship.OperationID;
             Guid processInstanceID = isa.OperationRelationship.ProcessInstanceID;
             int executeOrder = isa.OperationRelationship.ExecuteOrder;
-            
+            var nodeName = isa.ActivityInstance.Name;
             try
             {
                 List<string> fenceList = new List<string>();
@@ -68,7 +68,7 @@ namespace DQ.BMPWGT.SVR
                         }
                     }
                 }
-                new WGT2DOSSIOR(sea.Operator, sea.DBParam).Run(heziList);
+                new WGT2DOSSIOR(sea.Operator, sea.DBParam, nodeName == "外供电子版").Run(heziList);
                 //DEPSOption userGlobalOption = new DAOption2(sea.DBParam).GetUserGlobalOption(sea.Operator);
                 //new ServerSplitTask(sea.DBParam).Split(processInstanceID, sea.Operator, userGlobalOption);
             }

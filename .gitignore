@@ -1,4 +1,9 @@
-*.dll
+﻿*.dll
 *.pdb
 *.cache
 *.ico
+*.xml
+*.xml~
+DQ.BMPWGT.TEST/bin/
+DQ.BMPWGT.TEST/obj/
+*.dat
