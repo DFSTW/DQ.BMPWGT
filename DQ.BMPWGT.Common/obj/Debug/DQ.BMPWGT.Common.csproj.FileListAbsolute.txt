@@ -1,0 +1,9 @@
+F:\PLM\PLMUT\DQ.BMPWGT.Common\bin\Debug\DQ.BMPWGT.Common.dll
+F:\PLM\PLMUT\DQ.BMPWGT.Common\bin\Debug\DQ.BMPWGT.Common.pdb
+F:\PLM\PLMUT\DQ.BMPWGT.Common\obj\Debug\DQ.BMPWGT.Common.dll
+F:\PLM\PLMUT\DQ.BMPWGT.Common\obj\Debug\DQ.BMPWGT.Common.pdb
+F:\PLM\PLMUT\DQ.BMPWGT\DQ.BMPWGT.Common\bin\Debug\DQ.BMPWGT.Common.dll
+F:\PLM\PLMUT\DQ.BMPWGT\DQ.BMPWGT.Common\bin\Debug\DQ.BMPWGT.Common.pdb
+F:\PLM\PLMUT\DQ.BMPWGT\DQ.BMPWGT.Common\obj\Debug\DQ.BMPWGT.Common.dll
+F:\PLM\PLMUT\DQ.BMPWGT\DQ.BMPWGT.Common\obj\Debug\DQ.BMPWGT.Common.pdb
+F:\PLM\PLMUT\DQ.BMPWGT\DQ.BMPWGT.Common\obj\Debug\DQ.BMPWGT.Common.csprojResolveAssemblyReference.cache
