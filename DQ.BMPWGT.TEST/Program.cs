@@ -24,7 +24,7 @@ namespace DQ.BMPWGT.TEST
         static void Main(string[] args)
         {
             string[] guids = new string[]{
-                                    "117DD617FA2943449AE19EC80A4065DE",};
+                                    "AF3B54B39F470043B79AA26E198727B7",};
             int i = 0;
             foreach (var guid in guids)
             {

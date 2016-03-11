@@ -76,6 +76,7 @@ namespace DQ.BMPWGT.SVR
                 dossmaster.Iteration.SetAttrValue("ZDHQMXBYDOC", false);
                 dossmaster.Iteration.SetAttrValue("ZDHQMX", false);
                 dossmaster.Iteration.SetAttrValue("CJLXMX", false);
+                dossmaster.Iteration.SetAttrValue("YQWCSJ", DateTime.Now.AddDays(1));
             }
             dossmasterIterOid = qritem.GetItemMaster(box, "DQDOSSIERPRINT", userOid);
             var masteritem = qritem.GetBizItem(dossmasterIterOid.Oid, 0, 0, Guid.Empty, userOid, BizItemMode.BizItem) as DEBusinessItem;
@@ -176,10 +177,12 @@ namespace DQ.BMPWGT.SVR
             //doc.Iteration.SetAttrValue("ORGPRINTER", "谢晓霞");
             //doc.Iteration.SetAttrValue("ORGPRINTER", "曾志筠");
 
-            if (userPrint.ContainsKey(usernmame))
-                doc.Iteration.SetAttrValue("ORGPRINTER", userPrint[usernmame]);
+            if (ElecVersion == "-电子版") doc.Iteration.SetAttrValue("ORGPRINTER", "王凡");
             else
-                doc.Iteration.SetAttrValue("ORGPRINTER", "邓文斌");
+                if (userPrint.ContainsKey(usernmame))
+                    doc.Iteration.SetAttrValue("ORGPRINTER", userPrint[usernmame]);
+                else
+                    doc.Iteration.SetAttrValue("ORGPRINTER", "邓文斌");
 
             doc.Iteration.SetAttrValue("TWDMC", "外供图");
             doc.Iteration.SetAttrValue("WKFLINFO", comment /*+ "(" + order + ")"*/);
@@ -210,13 +213,13 @@ namespace DQ.BMPWGT.SVR
                 var heziMaster = qritem.GetItemMaster(hezi, "HEZI", userOid);
                 var heziItem = qritem.GetBizItem(heziMaster.Oid, 0, 0, Guid.Empty, userOid, BizItemMode.BizItem) as DEBusinessItem;
                 var content = heziItem.GetAttrValue("I", "WGTQD") as byte[];
-                
+
                 var fenceList = qritem.GetLinkedRelationItems(heziItem.MasterOid, heziItem.RevNum, heziItem.IterNum, "PARTTOPART", userOid, null);
                 foreach (DEBusinessItem fenceItem in fenceList)
                 {
                     //var order = fencerel.GetAttrValue("ORDER");
-                    var number = fenceItem.GetAttrValue("I","TZZS");
-                    var comment = fenceItem.GetAttrValue("I","PROJECTNAME");
+                    var number = fenceItem.GetAttrValue("I", "TZZS");
+                    var comment = fenceItem.GetAttrValue("I", "PROJECTNAME");
 
                     //draws.AddRange(PassWGTQD(Encoding.UTF8.GetString(content)));
                     var draws = PassWGTQD(Encoding.UTF8.GetString(content));
